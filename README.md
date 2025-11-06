@@ -1,7 +1,7 @@
 
-# 💰 Financial Bank Statement Analysis | December 2024  
+# Financial Bank Statement Analysis | December 2024  
 
-## 📚 Table of Contents  
+## Table of Contents  
 1. [Overview](#overview)  
 2. [Objectives](#objectives)  
 3. [Workflow](#workflow)  
