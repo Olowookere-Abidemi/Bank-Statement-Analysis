@@ -1,163 +1,180 @@
-# Financial Bank Statement Analysis | December 2024
 
-## Table of Contents
-1. [Overview](#overview)
-2. [Objectives](#objectives)
-3. [Methodology](#methodology)
-4. [Measures Used](#measures-used)
-5. [Key Insights](#key-insights)
-6. [Recommendations](#recommendations)
-7. [Challenges](#challenges)
-8. [Screenshots](#screenshots)
+# 💰 Financial Bank Statement Analysis | December 2024  
 
-## Overview
-This analysis provides insights into my December 2024 personal bank statement, evaluating income, expenses, transaction patterns, and spending habits. The goal is to track financial health, identify trends, and make data-driven financial decisions.
-
-## Objectives
-- Understand daily financial performance.
-- Identify spending patterns and major expense categories.
-- Compare income vs. expenses.
-- Track net cash flow.
-- Provide actionable financial recommendations.
-
-## Methodology
-1. **Data Extraction**: Opened the bank statement PDF directly in Excel, which converted it into a tabular format.
-2. **Data Cleaning**:
-   - Removed duplicates (none found).
-   - Standardized currency and text formats.
-   - Deleted the `Value Date` column as it was not required.
-   - Added a new **Serial Number (S/N)** column.
-   - Manually classified transaction types and beneficiaries using:
-     - **Text-to-Column**
-     - **Power Query Extraction**
-     - `IF(ISNUMBER(SEARCH()))` formula.
-3. **Data Loading**: Imported cleaned data into **Power BI** for visualization and analysis.
-
-## Measures Used
-Below are the **DAX measures** created in Power BI for analysis:
+## 📚 Table of Contents  
+1. [Overview](#overview)  
+2. [Objectives](#objectives)  
+3. [Workflow](#workflow)  
+   - [1. Data Source & Extraction](#1-data-source--extraction)  
+   - [2. Data Cleaning & Preparation (Excel)](#2-data-cleaning--preparation-excel)  
+   - [3. Dashboard Development (Excel)](#3-dashboard-development-excel)  
+   - [4. Dashboard Development (Power-BI)](#4-dashboard-development-power-bi)  
+4. [Key Insights](#key-insights)  
+5. [Recommendations](#recommendations)  
+6. [Challenges](#challenges)  
+7. [Tools Used](#tools-used)  
+8. [Project Highlights](#project-highlights)  
+9. [Lessons Learned](#lessons-learned)  
+10. [Author](#author)  
 
 ---
 
-### **1. Total Debit**
-```DAX
-Total Debit = SUM('Clean Data'[DEBIT])
-```
-🔹 This calculates the total amount spent.
+## Overview  
+This project explores my **December 2024 personal bank statement** to uncover **spending patterns, income sources, and cash flow behavior**.  
+The analysis was conducted using **Microsoft Excel** and **Power BI** — both used to design **fully interactive dashboards**.  
+
+The goal is to transform raw financial data into meaningful, visual insights that guide better personal financial decisions.
 
 ---
 
-### **2. Total Credit**
-```DAX
-Total Credit = SUM('Clean Data'[CREDIT])
-```
-🔹 This calculates the total amount received.
+## Objectives  
+- Track **daily cash inflow and outflow** to monitor personal financial health.  
+- Identify **top income sources** and **major expense areas**.  
+- Measure and visualize **Net Cash Flow trends** over time.  
+- Build **interactive dashboards** in both Excel and Power BI.  
+- Provide **data-driven financial recommendations** for improvement.  
 
 ---
 
-### **3. Net Cash Flow**
-```DAX
-Net Cash Flow = 
-VAR TotalCredit = SUMX('Clean Data', 'Clean Data'[CREDIT])
-VAR TotalDebit = SUMX('Clean Data', 'Clean Data'[DEBIT])
-RETURN
-[Total Credit] - [Total Debit]
+## Workflow  
 
-```
-🔹 This shows whether more money is coming in or going out.
+### 1. **Data Source & Extraction**  
+- Source: Personal **Jaiz Bank Statement (PDF)** for **December 2024**.  
+- Extracted directly into **Excel**, which automatically converted the data into tabular format.  
 
 ---
 
-### **4. Debit-to-Credit Ratio**
-```DAX
-Debit to Credit Ratio = DIVIDE([Total Debit], [Total Credit], 0)
-```
-🔹 Helps analyze spending versus earnings.
+### 2. **Data Cleaning & Preparation (Excel)**  
+Data cleaning and transformation steps were performed using **Excel formulas** and **Power Query**:  
+
+- Removed duplicates and dropped irrelevant columns (e.g., *Value Date*).  
+- Standardized all **₦ currency values** for consistency.  
+- Added a **Serial Number (S/N)** column for record indexing.  
+- Split the **Narration** column using **Text-to-Columns** to isolate transaction type and beneficiary.  
+- Classified transactions into **Credit** and **Debit** using:  
+  ```Excel
+  =IF(ISNUMBER(SEARCH("CR", [Narration])), "Credit", "Debit")
+   ```
+* Categorized transactions by payment channels such as **Transfer**, **POS**, and **Charges**.
 
 ---
 
-### **5. Average Transaction Value**
-```DAX
-Average Transaction Value = AVERAGE('Clean Data'[DEBIT]) + AVERAGE('Clean Data'[CREDIT])
-```
-🔹 Calculates the average amount per transaction.
+### 3. **Dashboard Development (Excel)**
+
+Designed a **dynamic and interactive Excel dashboard** using slicers, charts, and pivot tables.
+The dashboard enables users to filter by transaction type, date, and category, while visualizing income and expense patterns.
+
+#### 📊 Excel Dashboard Preview
+
+> ![Excel Financial Dashboard](EXCEL%20FINANCIAL%20DASHBOARD.png)
+
+**Dashboard Features:**
+
+* Interactive weekday filters (Mon–Sun).
+* Dynamic KPIs (Total Income, Total Expense, Net Cash Flow, Available Balance).
+* Top contributors for income and spending.
+* Day-by-day cash flow trend visualization.
+* Credit vs. Debit donut chart.
+* Weekly transaction behavior breakdown.
 
 ---
 
-### **6. Total Stamp Duty**
-```DAX
-Total Stamp Duty = 
-CALCULATE(
-    SUM('Clean Data'[DEBIT]), 
-    'Clean Data'[Transaction Type] = "Stamp Duty"
-)
-```
-🔹 Summarizes the total stamp duty paid.
+### 4. **Dashboard Development (Power BI)**
 
----
+Rebuilt the same dataset in **Power BI** to create an advanced version with deeper insights and interactivity.
 
-### **7. Total Charges**
-```DAX
-Total Charges = 
-CALCULATE(
-    SUM('Clean Data'[DEBIT]), 
-    'Clean Data'[Transaction Type] = "Charges"
-)
-```
-🔹 Summarizes all bank charges.
+#### 🖥️ Power BI Dashboard Preview
 
----
+> ![Power BI Dashboard](https://github.com/Olowookere-Abidemi/Bank-Statement-Analysis/blob/main/FINANCIAL%20DASHBOARD.jpg)
 
-### **8. Transaction Count**
-```DAX
-Transaction Count = COUNTROWS('Clean Data')
-```
-🔹 Counts the total number of transactions.
+**Power BI Enhancements:**
 
-📌 **Notes:**
-- Ensure that `'Clean Data'` is the correct table name in your Power BI dataset.
-- Use these measures in your dashboard for deeper financial insights.
+* Dynamic cards and KPIs with arrows indicating positive/negative change.
+* Cash flow trend chart with line markers for Income vs. Expense.
 
 
 ---
 
 ## Key Insights
-- **Total Credit**: ₦869,200
-- **Total Debit**: ₦878,800
-- **Net Cash Flow**: **₦-9,600** (Spent more than income, relying on November balance)
-- **Credit-to-Debit Ratio**: **1.01** (Almost equal income and expenses)
-- **Average Transaction Value**: **₦5,231**
-- **Highest Credit & Debit Transaction Day**: **December 27th**
-- **Major Expense Categories**:
-  - Transfers: **₦546,150**
-  - POS Transactions: **₦328,099**
-  - Stamp Duty & Charges: **₦1,740**
+
+| Metric                        | Value                | Insight                                                       |
+| ----------------------------- | -------------------- | ------------------------------------------------------------- |
+| **Total Credit (Income)**     | ₦869,200             | Total money received during December 2024.                    |
+| **Total Debit (Expenses)**    | ₦878,800             | Total amount spent across all categories.                     |
+| **Net Cash Flow**             | ₦-9,600              | Slight deficit, indicating reliance on prior month’s balance. |
+| **Credit-to-Debit Ratio**     | 1.01                 | Almost equal income and expenses.                             |
+| **Average Transaction Value** | ₦5,231               | Suggests small, frequent transactions.                        |
+| **Peak Financial Day**        | December 27th        | Highest transaction volume (income & expenses).               |
+| **Top Expense Channel**       | Transfers (₦546,150) | Main source of cash outflow.                                  |
+| **Top Income Source**         | Eyitayo (₦339K)      | Largest inflow contributor.                                   |
+
+---
 
 ## Recommendations
-- **Budget Optimization**: Reduce expenses to ensure spending does not exceed income.
-- **Expense Tracking**: Categorize expenses further to identify unnecessary costs.
-- **Savings Plan**: Set aside a fixed percentage of income monthly to avoid negative cash flow.
-- **Alternative Payment Methods**: Consider minimizing POS transactions to avoid excess fees.
-- **Monitoring High Transaction Days**: December 27th had the highest activity—analyze if it’s recurring to plan better.
+
+* **Budget Optimization:** Track spending categories and reduce POS or frequent transfer charges.
+* **Savings Discipline:** Automate monthly transfers to savings or investment accounts.
+* **Analyze Recurring Peaks:** Investigate high-activity dates (like Dec 27) to understand spending triggers.
+* **Use Data Continuously:** Update and monitor monthly statements to identify behavioral trends.
+* **Fee Minimization:** Consolidate payments to reduce stamp duty and POS transaction fees.
+
+---
 
 ## Challenges
-- **Manual Classification**: Required extensive effort in categorizing transactions from the narration column.
-- **Limited Data Scope**: Only one month analyzed—trends over multiple months could provide deeper insights.
 
-## Screenshots
-### Dashboard Overview
-![](https://github.com/Olowookere-Abidemi/Bank-Statement-Analysis/blob/main/FINANCIAL%20DASHBOARD.jpg))
-
----
-## Before and After Cleaning
-
-<p align="LEFT">
-  <img src="UNCLEAN DATA.png" alt="Unclean Data" width="100%">
-  
-  <img src="CLEAN DATA.png" alt="Clean Data" width="100%">
-
+| Challenge                 | Description                                                    |
+| ------------------------- | -------------------------------------------------------------- |
+| **Manual Classification** | Required careful tagging of transaction descriptions.          |
+| **Single-Month Dataset**  | Limited long-term trend analysis.                              |
+| **Data Consistency**      | Maintaining uniform categorization between Excel and Power BI. |
 
 ---
-This analysis provided a clear view of my financial health in December 2024, helping me make better financial decisions. 
+
+## Tools Used
+
+| Tool                | Purpose                                                            |
+| ------------------- | ------------------------------------------------------------------ |
+| **Microsoft Excel** | Data cleaning, transformation, and interactive dashboard creation. |
+| **Power BI**        | Advanced analytics, data modeling, and visual storytelling.        |
+| **Power Query**     | Automated data preparation and formatting.                         |
+
+---
+
+## Project Highlights
+
+* Dual-tool analysis combining **Excel interactivity** and **Power BI storytelling**.
+* Built a **scalable financial monitoring workflow** for future months.
+* Created **visual and analytical parity** between Excel and Power BI.
+* Transformed raw statement data into actionable personal finance insights.
+
+---
+
+## Lessons Learned
+
+* Data visualization becomes meaningful when connected to a story.
+* Both Excel and Power BI can complement each other when used strategically.
+* Even personal finance data reveals trends that can influence better money habits.
+
+---
+
+## Visual Gallery
+
+### 🔹 Data Cleaning Comparison
+
+| Before                              | After                           |
+| ----------------------------------- | ------------------------------- |
+| ![Unclean Data](UNCLEAN%20DATA.png) | ![Clean Data](CLEAN%20DATA.png) |
+
+---
+
+## Author
+
+**Abidemi O.**
+📊 *Data Analyst | Financial Analytics | Power BI | Excel | SQL*
+
+---
+
+
 
 
 
